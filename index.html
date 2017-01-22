@@ -38,6 +38,7 @@ var Vy = 0.0;
 var X = 0.0;
 var Y = 0.0;
 var timer = 0;
+var color = "#ff00ff";
 var cx = document.querySelector("canvas").getContext("2d");
 var canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = document.body.clientWidth - 5;
@@ -56,20 +57,22 @@ function CalcPos() {
     Vy += g * 0.05;
     X = Vx * 0.05 + X;
     Y = Vy * 0.05 + Y;
-    if (X > document.body.clientWidth - 32) {
-        Vx *= -0.9;
-        X = document.body.clientWidth - 32;
+
+    if (Math.abs(Math.round(Vy))<7 && Math.abs(Math.round(Vx)) < 7) {
+        Stop();
     } else if (X < 0) {
-        Vx *= -0.9;
+        Vx *= -0.7;
         X = 0;
     } else if (Y > document.body.clientHeight - 32) {
-        Vy *= -0.9;
+        Vy *= -0.7;
         Y = document.body.clientHeight - 32;
     } else if (Y < -16) {
-        Vy *= -0.9;
+        Vy *= -0.7;
         Y = -16;
-    } else if (Math.round(Y0 - Y) < 2 && Math.abs(Math.round(Vx)) < 7) {
-        Stop();
+    } else     if (X > document.body.clientWidth - 32) {
+        Vx *= -0.7;
+        X = document.body.clientWidth - 32;
+
     } else {
         ball.style.top = Math.round(Y).toString() + "px";
         ball.style.left = Math.round(X).toString() + "px";
@@ -77,6 +80,7 @@ function CalcPos() {
         cx.beginPath();
         cx.moveTo(Math.round(LX) + 16, Math.round(LY) + 16);
         cx.lineTo(Math.round(X) + 16, Math.round(Y) + 16);
+        cx.strokeStyle = color;
         cx.stroke();
     }
 }
@@ -89,7 +93,8 @@ function Start() {
     X = X0;
     Y = Y0;
     timer = setInterval(CalcPos, 5);
-    cx.clearRect(0, 0, canvas.width, canvas.height);
+    //cx.clearRect(0, 0, canvas.width, canvas.height);
+    color = getRandomColor();
 }
 function StartB(button) {
     if (Status) {
