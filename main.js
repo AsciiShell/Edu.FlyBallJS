@@ -6,6 +6,10 @@ function degChanged() {
     deg = document.getElementById("deg").value;
     document.getElementById("degText").innerHTML = "Угол: " + deg;
 }
+function kChanged() {
+    deg = document.getElementById("k").value;
+    document.getElementById("kText").innerHTML = "Остаток энергии: " + deg/100;
+}
 function sleep(ms) {
     return new Promise(resolve=>setTimeout(resolve, ms));
 }

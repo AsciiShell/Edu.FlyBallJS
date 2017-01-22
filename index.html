@@ -20,6 +20,10 @@
                 <input type="range" class="inline" min="0" max="90" step="1" value="45" id="deg" oninput="degChanged()">
                 <p id="degText" class="inline"></p>
             </div>
+            <div>
+                <input type="range" class="inline" min="0" max="100" step="1" value="90" id="k" oninput="kChanged()">
+                <p id="kText" class="inline"></p>
+            </div>
             <button id="button" onClick="StartB()">Старт</button>
         </div>
         <div id="ball" class="circle" style="position: absolute;"></div>
@@ -27,6 +31,7 @@
     <script type="text/javascript">
 speedChanged();
 degChanged();
+kChanged();
 var ball = document.getElementById("ball");
 var screen = document.getElementById("screen");
 var X0 = 0;
@@ -61,19 +66,19 @@ function CalcPos() {
         Stop();
     }
     if (X < 0) {
-        Vx *= -0.7;
+        Vx *= -document.getElementById("k").value/100;
         X = 0;
     }
     if (Y > document.body.clientHeight - 32) {
-        Vy *= -0.7;
+        Vy *= -document.getElementById("k").value/100;
         Y = document.body.clientHeight - 32;
     }
     if (Y < -16) {
-        Vy *= -0.7;
+        Vy *= -document.getElementById("k").value/100;
         Y = -16;
     }
     if (X > document.body.clientWidth - 32) {
-        Vx *= -0.7;
+        Vx *= -document.getElementById("k").value/100;
         X = document.body.clientWidth - 32;
     }
     ball.style.top = Math.round(Y).toString() + "px";
