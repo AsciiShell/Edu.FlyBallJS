@@ -57,7 +57,7 @@ function CalcPos() {
     Vy += g * 0.05;
     X = Vx * 0.05 + X;
     Y = Vy * 0.05 + Y;
-    if (Math.abs(Math.round(Vx)) < 4 && Math.abs(Math.round(Y0 - Y)) < 2) {
+    if (Math.abs(Math.round(Vx)) < 7 && Math.abs(Math.round(Vy)) < 7 && Math.abs(Math.round(Y - Y0)) < 4) {
         Stop();
     }
     if (X < 0) {
