@@ -1,0 +1,33 @@
+.inline {
+    display: inline-block;
+}
+.circle {
+	width: 32px;
+	height: 32px;
+	background: red;
+	-moz-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	border-radius: 16px;
+}
+button {
+    background: none;
+    outline: none;
+    border: none;
+    /*text-transform: uppercase;*/
+    padding: 5px;
+    color: rgb(0, 0, 0);
+    box-shadow: -1px 1px 2px rgb(97, 199, 72);
+    background-color: rgb(218, 228, 216)
+}
+
+button:hover,button:focus {
+    color: hsla(108, 12%, 0%, 1);
+    box-shadow: -1px 1px 2px hsla(108, 62%, 42%, 1);
+    background-color: hsla(108, 62%, 92%, 1)
+}
+
+button:active {
+    color: hsla(108, 42%, 32%, 1);
+    box-shadow: -2px 4px 8px hsla(64, 64%, 42%, 1);
+    background-color: hsla(64, 64%, 92%, 1);
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Полет тела</title>
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script type="text/javascript" src="main.js"></script>
+    </head>
+    <body id="screen" style="width: 100vw;height: 100vh;margin:0">
+        <div style="width: 100vw;height: 100vh; position: relative; z-index:0; ">
+            <canvas></canvas>
+        </div>
+        <div id="controls" style="position: absolute;top:0; z-index:1;">
+            <div>
+                <input type="range" class="inline" min="0" max="200" step="1" value="50" id="speed" oninput="speedChanged()">
+                <p id="speedText" class="inline"></p>
+            </div>
+            <div>
+                <input type="range" class="inline" min="0" max="90" step="1" value="45" id="deg" oninput="degChanged()">
+                <p id="degText" class="inline"></p>
+            </div>
+            <button id="button" onClick="StartB()">Старт</button>
+        </div>
+        <div id="ball" class="circle" style="position: absolute;"></div>
+    </body>
+    <script type="text/javascript">
+speedChanged();
+degChanged();
+var ball = document.getElementById("ball");
+var screen = document.getElementById("screen");
+var X0 = 0;
+var Y0 = document.body.clientHeight - 32;
+ball.style.top = Y0.toString() + "px";
+var Status = false;
+var Vx = 0.0;
+var Vy = 0.0;
+var X = 0.0;
+var Y = 0.0;
+var timer = 0;
+var cx = document.querySelector("canvas").getContext("2d");
+var canvas = document.getElementsByTagName('canvas')[0];
+canvas.width = document.body.clientWidth - 5;
+canvas.height = document.body.clientHeight - 5;
+function Stop() {
+    document.getElementById("button").innerHTML = "Старт";
+    clearInterval(timer);
+    Status = false;
+}
+function CalcPos() {
+    var g = 9.8;
+    //g = g * k2;
+    //v = v * k1;
+    var LX = X;
+    var LY = Y;
+    Vy += g * 0.05;
+    X = Vx * 0.05 + X;
+    Y = Vy * 0.05 + Y;
+    if (X > document.body.clientWidth - 32) {
+        Vx *= -0.9;
+        X = document.body.clientWidth - 32;
+    } else if (X < 0) {
+        Vx *= -0.9;
+        X = 0;
+    } else if (Y > document.body.clientHeight - 32) {
+        Vy *= -0.9;
+        Y = document.body.clientHeight - 32;
+    } else if (Y < -16) {
+        Vy *= -0.9;
+        Y = -16;
+    } else if (Math.round(Y0 - Y) < 2 && Math.abs(Math.round(Vx)) < 7) {
+        Stop();
+    } else {
+        ball.style.top = Math.round(Y).toString() + "px";
+        ball.style.left = Math.round(X).toString() + "px";
+        var cx = document.querySelector("canvas").getContext("2d");
+        cx.beginPath();
+        cx.moveTo(Math.round(LX) + 16, Math.round(LY) + 16);
+        cx.lineTo(Math.round(X) + 16, Math.round(Y) + 16);
+        cx.stroke();
+    }
+}
+function Start() {
+    document.getElementById("button").innerHTML = "Стоп";
+    var Speed = document.getElementById("speed").value;
+    Vx = Speed * Math.cos(document.getElementById("deg").value * Math.PI / 180);
+    Vy = -Speed * Math.sin(document.getElementById("deg").value * Math.PI / 180);
+    Status = true;
+    X = X0;
+    Y = Y0;
+    timer = setInterval(CalcPos, 5);
+    cx.clearRect(0, 0, canvas.width, canvas.height);
+}
+function StartB(button) {
+    if (Status) {
+        //Останавливаем
+        Stop();
+    } else {
+        //Запускаем
+        Start();
+    }
+}
+    </script>
+</html>
