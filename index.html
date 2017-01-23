@@ -3,7 +3,7 @@
     <head>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Полет тела</title>
+        <title>Полёт тела</title>
         <link rel="stylesheet" type="text/css" href="main.css">
         <script type="text/javascript" src="main.js"></script>
     </head>
@@ -21,7 +21,7 @@
                 <p id="degText" class="inline"></p>
             </div>
             <div>
-                <input type="range" class="inline" min="0" max="100" step="1" value="90" id="k" oninput="kChanged()">
+                <input type="range" class="inline" min="0" max="1000" step="1" value="700" id="k" oninput="kChanged()">
                 <p id="kText" class="inline"></p>
             </div>
             <button id="button" onClick="StartB()">Старт</button>
@@ -44,6 +44,8 @@ var X = 0.0;
 var Y = 0.0;
 var timer = 0;
 var color = "#ff00ff";
+var scale = 0.03;
+var g = 9.8;
 var cx = document.querySelector("canvas").getContext("2d");
 var canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = document.body.clientWidth - 5;
@@ -53,37 +55,42 @@ function Stop() {
     clearInterval(timer);
     Status = false;
 }
+function CalcEnergy(){
+    Vx *= Math.sqrt(document.getElementById("k").value/1000);
+    Vy *= Math.sqrt(document.getElementById("k").value/1000); 
+}
 function CalcPos() {
-    var g = 9.8;
-    //g = g * k2;
-    //v = v * k1;
     var LX = X;
     var LY = Y;
-    Vy += g * 0.05;
-    X = Vx * 0.05 + X;
-    Y = Vy * 0.05 + Y;
+    Vy += g * scale;
+    X = Vx * scale + X;
+    Y = Vy * scale + Y;
     if (Math.abs(Math.round(Vx)) < 7 && Math.abs(Math.round(Vy)) < 7 && Math.abs(Math.round(Y - Y0)) < 4) {
         Stop();
     }
     if (X < 0) {
-        Vx *= -document.getElementById("k").value/100;
+        Vx *= -1;
+        CalcEnergy();
         X = 0;
     }
     if (Y > document.body.clientHeight - 32) {
-        Vy *= -document.getElementById("k").value/100;
+        Vy *= -1
+        CalcEnergy();
         Y = document.body.clientHeight - 32;
     }
-    if (Y < -16) {
-        Vy *= -document.getElementById("k").value/100;
-        Y = -16;
+    if (Y < 0) {
+        Vy *= -1;
+        CalcEnergy();
+        Y = 0;
     }
     if (X > document.body.clientWidth - 32) {
-        Vx *= -document.getElementById("k").value/100;
+        Vx *= -1;
+        CalcEnergy();
         X = document.body.clientWidth - 32;
     }
     ball.style.top = Math.round(Y).toString() + "px";
     ball.style.left = Math.round(X).toString() + "px";
-    var cx = document.querySelector("canvas").getContext("2d");
+    
     cx.beginPath();
     cx.moveTo(Math.round(LX) + 16, Math.round(LY) + 16);
     cx.lineTo(Math.round(X) + 16, Math.round(Y) + 16);
@@ -98,7 +105,9 @@ function Start() {
     Status = true;
     X = X0;
     Y = Y0;
-    timer = setInterval(CalcPos, 5);
+    timer = setInterval(CalcPos, 1);
+    //timer = setInterval(CalcPos, 4);
+
     //cx.clearRect(0, 0, canvas.width, canvas.height);
     color = getRandomColor();
 }

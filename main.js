@@ -8,7 +8,7 @@ function degChanged() {
 }
 function kChanged() {
     deg = document.getElementById("k").value;
-    document.getElementById("kText").innerHTML = "Остаток энергии: " + deg/100;
+    document.getElementById("kText").innerHTML = "КПД удара: " + deg/10 + "%";
 }
 function sleep(ms) {
     return new Promise(resolve=>setTimeout(resolve, ms));
